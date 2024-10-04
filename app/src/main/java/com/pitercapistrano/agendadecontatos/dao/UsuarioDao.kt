@@ -16,6 +16,5 @@ interface UsuarioDao { // Declara a interface UsuarioDao para manipular dados no
 
     @Query("UPDATE tabela_usuarios SET nome = :novoNome, sobrenome = :novoSobrenome, email = :novoEmail, telefone = :novoTelefone " +
     "WHERE uid = :id")
-
     fun atualizar(id: Int, novoNome: String, novoSobrenome: String, novoEmail: String, novoTelefone: String)
 }
