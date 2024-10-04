@@ -1,6 +1,7 @@
 package com.pitercapistrano.agendadecontatos.dao // Declara o pacote onde a classe está localizada
 
 import androidx.room.Dao // Importa a anotação Dao do Room, usada para definir a interface de acesso ao banco de dados
+import androidx.room.Delete
 import androidx.room.Insert // Importa a anotação Insert para inserir dados no banco de dados
 import androidx.room.Query
 import com.pitercapistrano.agendadecontatos.model.Usuario // Importa a classe Usuario, que representa a entidade do banco de dados
@@ -17,4 +18,7 @@ interface UsuarioDao { // Declara a interface UsuarioDao para manipular dados no
     @Query("UPDATE tabela_usuarios SET nome = :novoNome, sobrenome = :novoSobrenome, email = :novoEmail, telefone = :novoTelefone " +
     "WHERE uid = :id")
     fun atualizar(id: Int, novoNome: String, novoSobrenome: String, novoEmail: String, novoTelefone: String)
+
+    @Query("DELETE FROM tabela_usuarios WHERE uid = :id")
+    fun delete(id: Int)
 }

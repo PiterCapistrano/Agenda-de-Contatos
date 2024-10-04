@@ -1,14 +1,21 @@
 package com.pitercapistrano.agendadecontatos.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.pitercapistrano.agendadecontatos.AppDatabase
 import com.pitercapistrano.agendadecontatos.AtualizarUsuario
+import com.pitercapistrano.agendadecontatos.dao.UsuarioDao
 import com.pitercapistrano.agendadecontatos.databinding.ContatoItemBinding
 import com.pitercapistrano.agendadecontatos.model.Usuario
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ContatoAdapter(private val context: Context, private val listaUsuarios: MutableList<Usuario>):
@@ -21,6 +28,7 @@ class ContatoAdapter(private val context: Context, private val listaUsuarios: Mu
 
     override fun getItemCount() = listaUsuarios.size
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ContatoViewHolder, position: Int) {
         holder.txtNome.text = listaUsuarios[position].nome
         holder.txtSobrenome.text = listaUsuarios[position].sobrenome
@@ -36,6 +44,21 @@ class ContatoAdapter(private val context: Context, private val listaUsuarios: Mu
             intent.putExtra("uid", listaUsuarios[position].uid)
 
             context.startActivity(intent)
+        }
+
+        holder.btDelete.setOnClickListener {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val usuario = listaUsuarios[position]
+                val usuarioDao: UsuarioDao = AppDatabase.getInstance(context).usuarioDao()
+                usuarioDao.delete(usuario.uid)
+                listaUsuarios.remove(usuario)
+
+                withContext(Dispatchers.Main){
+                    notifyDataSetChanged()
+                    Toast.makeText(context, "Contato deletado com sucesso!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
