@@ -1,9 +1,11 @@
 package com.pitercapistrano.agendadecontatos.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.pitercapistrano.agendadecontatos.AtualizarUsuario
 import com.pitercapistrano.agendadecontatos.databinding.ContatoItemBinding
 import com.pitercapistrano.agendadecontatos.model.Usuario
 
@@ -24,6 +26,17 @@ class ContatoAdapter(private val context: Context, private val listaUsuarios: Mu
         holder.txtSobrenome.text = listaUsuarios[position].sobrenome
         holder.txtEmail.text = listaUsuarios[position].email
         holder.txtTelefone.text = listaUsuarios[position].telefone
+
+        holder.btEdit.setOnClickListener {
+           val intent = Intent(context, AtualizarUsuario::class.java)
+            intent.putExtra("nome", listaUsuarios[position].nome)
+            intent.putExtra("sobrenome", listaUsuarios[position].sobrenome)
+            intent.putExtra("email", listaUsuarios[position].email)
+            intent.putExtra("telefone", listaUsuarios[position].telefone)
+            intent.putExtra("uid", listaUsuarios[position].uid)
+
+            context.startActivity(intent)
+        }
     }
 
     inner class ContatoViewHolder(binding: ContatoItemBinding) : RecyclerView.ViewHolder(binding.root) {
